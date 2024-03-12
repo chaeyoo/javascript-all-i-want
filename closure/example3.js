@@ -25,7 +25,7 @@ console.log(myCounter.getCurrentCount());
 // 두 메서드는 클로저를 형성하여 createCounter 함수의 실행 컨텍스트가 종료된 후에도 count 변수에 계속 접근 가능
 // 내부 함수가 객체 형태로 외부에 노출되고 외부함수의 변수에 접근하면 클로저 형성
 // 클로저를 사용해서 각 createCounter 함수 호출이 독립적인 count 상태를 유지할 수 있음
-//각 myCounter 객체는 자신만의 count 값을 가지며 이는 다른 count 객체와 독립적
+// 각 myCounter 객체는 자신만의 count 값을 가지며 이는 다른 count 객체와 독립적
 
 // myCounter와는 독립적인 인스턴스
 const myCounter2 = createCounter();
