@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        const app = createEl({
+            tagName: 'div',
+            properties: { id: 'app' },
+            parent: document.body
+        })
+
+        const header = createEl({
+            tagName: 'div',
+            properties: { id: 'header' },
+            parent: app,
+            children: [
+                {
+                    tagName: 'h1',
+                    properties: { innerText: 'To-do list' },
+                },
+                {
+                    tagName: 'div',
+                    properties: { id: 'counter' },
+                    children: [
+                        {
+                            tagName: 'span',
+                            properties: { innerText: 'Total : ' },
+                        },
+                        {
+                            tagName: 'span',
+                            properties: { innerText: '0' },
+                        },
+                        {
+                            tagName: 'span',
+                            properties: { innerText: 'Complete' },
+                        },
+                        {
+                            tagName: 'span',
+                            properties: { innerText: '0' },
+                        }
+                    ]
+                }
+            ]
+        });
+
+        const inputField = createEl({
+            tagName: 'div',
+            properties: { id: 'input-field' },
+            parent: app,
+            children: [
+                {
+                    tagName: 'input',
+                    properties: { placeholder: '할일 입력' }
+                },
+                {
+                    tagName: 'button',
+                    properties: { innerText: '추가' }
+                },
+            ]
+        });
+
+
+        const itemListContainer = createEl({
+            tagName: 'div',
+            properties: { id: 'item-list-container' },
+            parent: app,
+            children: [
+                {
+                    tagName: 'ul',
+                    properties: { id: 'item-list' },
+                }
+            ]
+        });
+
+        function createEl({ tagName, properties, parent, children, cnt = 1 }) {
+            const create = () => {
+                const el = document.createElement(tagName);
+                Object.assign(el, properties); // 앞의 obj에 뒤 obj를 merge
+                parent?.appendChild(el);
+                children?.map(child => {
+                    child.parent = el;
+                    createEl(child);
+                });
+                return el;
+            }
+
+            if (cnt > 1) {
+                const result = [];
+                for (let i = 0; i < cnt; ++i) {
+                    result.push(create());
+                }
+                return result;
+            } else {
+                return create();
+            }
+        }
+    </script>
+</body>
+
+</html>
