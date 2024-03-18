@@ -40,7 +40,7 @@
                         },
                         {
                             tagName: 'span',
-                            properties: { innerText: 'Completed' },
+                            properties: { innerText: 'Completed : ' },
                         },
                         {
                             tagName: 'span',
@@ -220,13 +220,16 @@
 
         const addButton = document.querySelector('#input-field button');
         addButton.addEventListener('click', () => {
-            const todo = addButton.previousSibling.value;
-            const itemContainer = document.querySelector('#item-list-container ul')
 
+            let todo = addButton.previousSibling.value;
+
+
+            if (!validateCheck(todo)) {
+                return;
+            }
             // 아이템 생성
             const item = createEl({
                 tagName: 'li',
-                parent: itemContainer,
                 children: [
                     { tagName: 'input', properties: { type: 'checkbox' } },
                     { tagName: 'span', properties: { innerText: todo } },
@@ -234,6 +237,38 @@
                 ]
             });
 
+            addItem(item);
+            registEvents(item);
+
+            updateCounter();
+        });
+
+
+        function validateCheck(todo) {
+            todo = todo.trim();
+            if (!todo) {
+                alert('값을 입력해주세요');
+                return false;
+            }
+
+            const itemContainer = document.querySelector('#item-list-container ul');
+
+            const existed = Array.from(itemContainer.children).find(child => child.children[1].innerText == todo);
+
+            console.log(existed);
+            if (existed) {
+                alert('이미 있는 할일 이긴해');
+                return false;
+            }
+
+            return true;
+        }
+        function addItem(item) {
+            const itemContainer = document.querySelector('#item-list-container ul');
+            itemContainer.appendChild(item);
+        }
+
+        function registEvents(item) {
             const [checkbox, text, removeButton] = item.children;
             checkbox.addEventListener('change', () => {
                 checkbox.checked ?
@@ -241,26 +276,24 @@
                     : text.style.removeProperty('text-decoration');
 
                 // 완료 카운터 업데이트
-                const completeCount = Array.from(itemContainer.children).filter(child => child.firstChild.checked).length;
-                const counter = document.getElementById('counter');
-                counter.lastChild.innerText = '' + completeCount;
-
+                updateCounter();
             });
-
-            // 토탈 카운터 업데이트
-            const counter = document.getElementById('counter');
-            counter.children[1].innerText = '' + itemContainer.children.length;
 
             // 삭제 버튼 이벤트 처리
             removeButton.addEventListener('click', () => {
                 item.remove();
-
-                // 카운터 전체 업데이트
-                counter.children[1].innerText = '' + itemContainer.children.length;
-                const completeCount = Array.from(itemContainer.children).filter(child => child.firstChild.checked).length;
-                counter.lastChild.innerText = '' + completeCount;
+                updateCounter();
             });
-        })
+        }
+
+        function updateCounter() {
+            const itemContainer = document.querySelector('#item-list-container ul');
+            const counter = document.getElementById('counter');
+            counter.children[1].innerText = '' + itemContainer.children.length;
+            const completeCount = Array.from(itemContainer.children).filter(child => child.firstChild.checked).length;
+            counter.lastChild.innerText = '' + completeCount;
+        }
+
 
 
         function createEl({ tagName, properties, parent, children, cnt = 1 }) {
