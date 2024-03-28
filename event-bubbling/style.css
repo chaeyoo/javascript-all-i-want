@@ -1,0 +1,13 @@
+#div1 {
+    width: 200px;
+    height: 100px;
+    border: 2px solid purple;
+}
+
+
+#div2 {
+    width: 70px;
+    height: 70px;
+    border: 2px solid pink;
+    margin: 5px;
+}
