@@ -1,6 +1,10 @@
 
-export default function makeCarousel(itemList, visibleCnt = 4) {
-
+export default function makeCarousel(
+    itemList,
+    options) {
+    
+    // 기본 값에 options로 들어온 값 병합
+    const { visibleCnt, captionPos } = Object.assign({ visibleCnt: 1, captionPos: 'center middle' }, options);
 
     const iconPrev = `<div style="width: 40px; height: 20px; background-color: red; cursor: pointer">이전</div>`;
 
@@ -129,6 +133,7 @@ export default function makeCarousel(itemList, visibleCnt = 4) {
         justify-content: center;
         align-items: center;
         overflow: hidden;
+        position: relative;
     `;
 
         const image = createEl({
@@ -155,6 +160,18 @@ export default function makeCarousel(itemList, visibleCnt = 4) {
         position: absolute;
         filter: drop-shadow(3px 3px 30px rgba(0 0 0 / 0.5));
     `;
+
+        if (captionPos.includes('left')) {
+            caption.style.left = '10%'
+        } else if (captionPos.includes('right')) {
+            caption.style.right = '10%'
+        }
+
+        if (captionPos.includes('top')) {
+            caption.style.top = '20%'
+        } else if (captionPos.includes('bottom')) {
+            caption.style.bottom = '20%'
+        }
 
         return container;
     }
