@@ -1,18 +1,18 @@
 
-export default function makeCarousel() {
+export default function makeCarousel(itemList, visibleCnt = 4) {
 
 
     const iconPrev = `<div style="width: 40px; height: 20px; background-color: red; cursor: pointer">이전</div>`;
 
     const iconNext = `<div style="width: 40px; height: 20px; background-color: red; cursor: pointer">다음</div>`
 
-
+    const itemWidth = Math.trunc(400 / visibleCnt);
     const wrapper = createEl({
         tagName: 'div',
     });
     wrapper.style.cssText = `
     width: 100%;
-    height: 100%;
+    height: ${100 / visibleCnt}%;
     position: relative;
     display: flex;
     overflow: hidden
@@ -26,28 +26,59 @@ export default function makeCarousel() {
 
     itemContainer.style.cssText = `
     display: flex;
-    transform: translateX(-400px);
+    transform: translateX(0px);
 `;
     addBtns();
 
-    addImgItem(itemContainer, './images/01.jpg');
-    addImgItem(itemContainer, './images/02.jpg');
-    addImgItem(itemContainer, './images/03.jpg');
-    addImgItem(itemContainer, './images/04.jpg');
-    addImgItem(itemContainer, './images/05.jpg');
-
-
-    function handleSlide(next = true) {
-        itemContainer.style.transitionDuration = '0.5s';
-        itemContainer.style.transform = `translateX(${next ? -800 : 0}px)`;
-        itemContainer.ontransitionend = () => {
-            itemContainer.style.removeProperty('transition-duration');
-            itemContainer.style.transform = 'translateX(-400px)';
-            next ? itemContainer.appendChild(itemContainer.firstChild)
-                : itemContainer.prepend(itemContainer.lastChild);
-        }
+    // itemList 있는 경우에는 새로 아이템 만들어서 추가
+    if (itemList) {
+        // itemList = [...itemList.splice(-1), ...itemList];
+        itemList.forEach(item => {
+            addImgItem(itemContainer, item);
+        });
+    } else {
+        // 없을 때는 기존처럼 동작
+        addImgItem(itemContainer, './images/01.jpg');
+        addImgItem(itemContainer, './images/02.jpg');
+        addImgItem(itemContainer, './images/03.jpg');
+        addImgItem(itemContainer, './images/04.jpg');
+        addImgItem(itemContainer, './images/05.jpg');
     }
 
+    function handleSlide(next = true) {
+        // const clone = next ? itemContainer.firstChild.cloneNode(true) : undefined;
+        // clone && itemContainer.appendChild(clone);
+
+        // clone 떠서 미리 배치
+        if (next) {
+            itemContainer.appendChild(
+                itemContainer.firstChild.cloneNode(true)
+            )
+        } else {
+            itemContainer.prepend(
+                itemContainer.lastChild.cloneNode(true)
+            )
+            itemContainer.style.transform = `translateX(${-itemWidth}px)`
+        }
+        setTimeout(() => {
+            handleTransitionEnd(next);
+        }, 0);
+
+    }
+
+
+    function handleTransitionEnd(next) {
+        itemContainer.style.transitionDuration = '0.5s';
+        itemContainer.style.transform = `translateX(${next ? (- itemWidth) : 0}px)`;
+
+        itemContainer.ontransitionend = () => {
+            itemContainer.style.removeProperty('transition-duration');
+            itemContainer.style.transform = `translateX(0px)`;
+
+            next ? itemContainer.firstChild.remove()
+                : itemContainer.lastChild.remove();
+        }
+    }
 
     function addBtns() {
 
@@ -93,7 +124,7 @@ export default function makeCarousel() {
         });
 
         container.style.cssText = `
-        width: 400px;
+        width: ${itemWidth}px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -109,7 +140,6 @@ export default function makeCarousel() {
         image.style.cssText = `
         width: 100%;
         height: 100%;
-
         }
     `;
 
