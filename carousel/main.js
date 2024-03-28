@@ -16,5 +16,22 @@ app.append(makeCarousel([
     './images/03.jpg',
     './images/04.jpg',
     './images/05.jpg'
-]));
-app.append(makeCarousel());
+], { visibleCnt: 1, captionPos: 'left' }));
+
+app.append(makeCarousel([
+    './images/01.jpg',
+    './images/02.jpg',
+    './images/03.jpg',
+    './images/04.jpg',
+    './images/05.jpg'
+], { visibleCnt: 2, captionPos: 'left bottom' }));
+
+app.append(makeCarousel([
+    './images/01.jpg',
+    './images/02.jpg',
+    './images/03.jpg',
+    './images/04.jpg',
+    './images/05.jpg'
+], { visibleCnt: 3, captionPos: 'right top' }));
+
+// app.append(makeCarousel());
