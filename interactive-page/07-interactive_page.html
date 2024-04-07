@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r154/build/three.js"></script>
     <script type="module" src="./main.js"></script>
     <style>
         body,
@@ -43,16 +44,44 @@
             font-size: 2rem;
             white-space: pre;
         }
+
+        .tilt-effect-container {
+            perspective: 1000px;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .tilt-effect {
+            background-color: tomato;
+            width: 50%;
+            height: 50%;
+            transition: transform 0.1s;
+            transform-style: preserve-3d;
+        }
+
+        .progress {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 5px;
+            background-color: tomato;
+            z-index: 1000;
+        }
     </style>
 </head>
 
 <body>
     <div>
+        <div id="scroll-progress" class="progress"></div>
         <section class="scroll-animate typing-effect"></section>
-        <section class="scroll-animate"></section>
-        <section class="scroll-animate"></section>
-        <section class="scroll-animate"></section>
-        <section class="scroll-animate"></section>
+        <section id="image-slider" class="scroll-animate"></section>
+        <section id="video-player" class="scroll-animate"></section>
+        <section id="model-viewer" class="scroll-animate"></section>
+        <section class="scroll-animate tilt-effect-container">
+            <div class="tilt-effect"></div>
+        </section>
     </div>
 </body>
 
